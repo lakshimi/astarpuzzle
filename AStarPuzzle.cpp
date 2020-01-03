@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------
 //	File:		AStarPuzzle.cpp
-//	Author:		Edan Choi
+//	Author:		Aubrey Choi
 //	Date:		2014.12.12.
 //	Contact:	http://sdev.tistory.com
 //	Update:
@@ -169,7 +169,9 @@ bool MyWindow::OnTimer(HWND hWnd, UINT message, WPARAM wParam)
 	if( phase == 1 )
 	{
 		wchar_t buf[128];
-		swprintf(buf, L"%d", param.numNodes);
+		if(param.numNodes>100000) swprintf(buf, L"%.2fM", param.numNodes/1e6);
+		else if(param.numNodes>=1000) swprintf(buf, L"%d,%d", param.numNodes/1000, param.numNodes%1000);
+		else swprintf(buf, L"%d", param.numNodes);
 		SetWindowTextW(hNodes, buf);
 		if( param.numResult != 0 ) { phase = 2; moves = 1; anims = 0; return 0; }
 	}

@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------
 //	File:		WinModule.cpp
-//	Author:		Edan Choi
+//	Author:		Aubrey Choi
 //	Date:		2014.12.12.
 //	Contact:	http://sdev.tistory.com
 //	Update:

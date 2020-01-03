@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------
 //	File:		SolvePuzzle.cpp
-//	Author:		Edan Choi
+//	Author:		Aubrey Choi
 //	Date:		2014.12.12.
 //	Contact:	http://sdev.tistory.com
 //	Update:
@@ -10,8 +10,9 @@
 #include "PQueue.h"
 
 #include <stdlib.h>
+#include <time.h>
 
-#define	HASHSIZE	31
+#define	HASHSIZE	3309377
 
 inline char abs(char x) { return x<0?-x:x; }
 int Move(char *squares, int rows, int cols, int emptySquare, eMove move);
@@ -66,13 +67,13 @@ int PuzzleNode::numRows;
 int PuzzleNode::numCols;
 int PuzzleNode::numSquares;
 
-unsigned int GetHash(char *squares)
+unsigned GetHash(char *squares)
 {
-	unsigned int h = 0xc7423d43;
+	unsigned long long h = 0x39bdc7423d43;
 	for( int i = 0 ; i < PuzzleNode::numSquares ; i++ )
 	{
 		h |= squares[i];
-		h = h<<11 | h>>21;
+		h = h<<27 | h>>37;
 	}
 	h %= HASHSIZE;
 	return h;
@@ -100,11 +101,9 @@ void SolvePuzzle(void *param)
 	PuzzleParams *pp = (PuzzleParams *)param;
 
 	PQueue queue;
-	PuzzleNode *hash[HASHSIZE];
+	static PuzzleNode *hash[HASHSIZE];
 
 	PuzzleNode::SetDimension(pp->rows, pp->cols);
-
-	memset(hash, 0, sizeof(hash));
 
 	char *csquares = new char[pp->rows*pp->cols];
 	memcpy(csquares, pp->squares, pp->rows*pp->cols*sizeof(char));
@@ -188,14 +187,14 @@ bool CanSolve(PuzzleParams *param)
 
 void GenerateRandomPuzzle(PuzzleParams *param)
 {
+	srand(time(0));
+	srand(17);
 	param->squares = new char[param->rows*param->cols];
-	for( int i = 1 ; i < param->rows*param->cols ; i++ )
-		param->squares[i-1] = i;
+	for( int i = 1 ; i < param->rows*param->cols ; i++ ) param->squares[i-1] = i;
 	param->emptySquare = param->rows*param->cols-1;
 	param->squares[param->emptySquare] = 0;
 
-	for( int i = 0 ; i < param->rows*param->cols*10 ; i++ )
-		Move(param, (eMove)(rand()%4));
+	for( int i = 0 ; i < param->rows*param->cols*41 ; i++ ) Move(param, (eMove)(rand()%4));
 }
 
 bool Move(PuzzleParams *param, eMove move)
